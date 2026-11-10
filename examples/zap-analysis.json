@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.1",
+  "tool": "owasp-zap-json-analyser",
+  "generated_at": "2026-11-10T12:22:16+00:00",
+  "target": "sample_data/zap-sample.json",
+  "findings": [
+    {
+      "title": "Example: X-Content-Type-Options Header Missing",
+      "severity": "LOW",
+      "description": "Sample scanner alert for demonstrating report normalisation. This is not a real assessment result.",
+      "evidence": "Site: https://app.example.test\nInstances: 1\nScanner confidence: Medium\nAffected URI(s): https://app.example.test/",
+      "recommendation": "Set X-Content-Type-Options: nosniff where appropriate.",
+      "source": "OWASP ZAP JSON report",
+      "confidence": "Scanner-generated (Medium); requires manual validation"
+    }
+  ],
+  "observations": [
+    {
+      "site": "https://app.example.test",
+      "alert": "Example: X-Content-Type-Options Header Missing",
+      "risk": "LOW",
+      "confidence": "Medium",
+      "instance_count": 1,
+      "cweid": "16",
+      "pluginid": "10021"
+    }
+  ],
+  "false_positives_excluded": 0,
+  "malformed_alerts_skipped": 0,
+  "duplicates_skipped": 0,
+  "note": "Scanner alerts are leads for triage; confirm exploitability and impact before reporting as verified findings."
+}

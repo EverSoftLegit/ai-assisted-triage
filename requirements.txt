@@ -1,0 +1,2 @@
+# Core triage pipeline uses the Python standard library only.
+# No runtime dependencies: the Anthropic API is called over plain HTTPS via urllib.

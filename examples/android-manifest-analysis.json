@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.1",
+  "tool": "android-manifest-review",
+  "generated_at": "2026-11-10T15:48:47+00:00",
+  "target": "sample_data/android/AndroidManifest.xml",
+  "findings": [
+    {
+      "title": "Application is debuggable",
+      "severity": "HIGH",
+      "description": "android:debuggable=\"true\" lets anyone with ADB access attach a debugger and read the app's private data with run-as. Release builds should never set it.",
+      "evidence": "com.example.labapp: <application android:debuggable=\"true\">",
+      "recommendation": "Confirm this is the release build; remove debuggable from release configuration.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Definitive for this APK; confirm it is the production build"
+    },
+    {
+      "title": "Application data backup is enabled",
+      "severity": "LOW",
+      "description": "android:allowBackup is absent (defaults to true). From API 31, adb backup excludes app data unless debuggable, but cloud backup and device-to-device transfer still apply.",
+      "evidence": "com.example.labapp: allowBackup=(absent); targetSdk=34",
+      "recommendation": "Set allowBackup=\"false\", or define backup rules that exclude tokens and sensitive files.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "Cleartext traffic permitted for specific domains",
+      "severity": "INFO",
+      "description": "domain-config entries allow HTTP to the listed domains.",
+      "evidence": "legacy.example.test",
+      "recommendation": "Confirm each domain needs HTTP and carries no sensitive data.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "App trusts user-installed CA certificates",
+      "severity": "MEDIUM",
+      "description": "A certificate authority installed by the user (or by malware or an MDM profile) can intercept this app's TLS traffic.",
+      "evidence": "com.example.labapp: <base-config> contains <certificates src=\"user\"/>",
+      "recommendation": "Trust only system CAs in release builds; move user-CA trust into <debug-overrides>.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "Exported activity component(s) without permission protection (1)",
+      "severity": "INFO",
+      "description": "Other apps on the device can invoke these activity components. Review each for sensitive actions or data reachable without authorisation.",
+      "evidence": ".DeepLinkActivity",
+      "recommendation": "Set exported=\"false\" where not needed, or require a signature-level permission; validate all incoming intent data.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "Exported service component(s) without permission protection (1)",
+      "severity": "LOW",
+      "description": "Other apps on the device can invoke these service components. Review each for sensitive actions or data reachable without authorisation.",
+      "evidence": ".SyncService (custom permission com.example.labapp.permission.SYNC is not signature-level)",
+      "recommendation": "Set exported=\"false\" where not needed, or require a signature-level permission; validate all incoming intent data.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "Exported receiver component(s) without permission protection (1)",
+      "severity": "LOW",
+      "description": "Other apps on the device can invoke these receiver components. Review each for sensitive actions or data reachable without authorisation.",
+      "evidence": ".PushReceiver",
+      "recommendation": "Set exported=\"false\" where not needed, or require a signature-level permission; validate all incoming intent data.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "Exported provider component(s) without permission protection (1)",
+      "severity": "MEDIUM",
+      "description": "Other apps on the device can invoke these provider components. Review each for sensitive actions or data reachable without authorisation.",
+      "evidence": ".NotesProvider",
+      "recommendation": "Set exported=\"false\" where not needed, or require a signature-level permission; validate all incoming intent data.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    },
+    {
+      "title": "Custom URL schemes registered",
+      "severity": "INFO",
+      "description": "Any installed app can register the same custom scheme, so links using it can be intercepted. Sensitive data (e.g. OAuth codes) should not travel through custom-scheme links.",
+      "evidence": "labapp://",
+      "recommendation": "Prefer verified https App Links for sensitive flows; validate deep-link parameters.",
+      "source": "AndroidManifest.xml (static review)",
+      "confidence": "Static configuration indicator; confirm with dynamic testing"
+    }
+  ],
+  "app_summary": {
+    "package": "com.example.labapp",
+    "target_sdk": 34,
+    "requested_permissions": [
+      "android.permission.CAMERA",
+      "android.permission.INTERNET"
+    ],
+    "exported_state_undetermined": [],
+    "custom_url_schemes": [
+      "labapp"
+    ]
+  },
+  "note": "Static manifest review only. Exported components and settings are leads for dynamic testing, not confirmed vulnerabilities."
+}
